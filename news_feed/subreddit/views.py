@@ -20,14 +20,20 @@ class CreateSubredditView(View):
     """
 
     def post(self, request, *args, **kwargs):
+        # parse data in request
         input_data = json.loads(request.body)
 
+        # if there is something wrong here
         if 'title' not in input_data or 'description' not in input_data:
             logger.error('Missing parameter')
             return JsonResponse(status=400, data={'status': 'Missing parameter'}, safe=False)
 
         # STUDENT TODO | Create subreddit from parameters
-
+        # DONE
+        title = input_data['title']
+        description = input_data['description']
+        subreddit = Subreddit(title=title, description=description)
+        subreddit.save()
         return JsonResponse(status=200, data={'status': 'OK'}, safe=False)
 
 
@@ -46,10 +52,13 @@ class ListSubredditView(View):
             data={
                 'status': 'OK',
                 # STUDENT TODO | Return title and description as well
+                # DONE
                 'subreddits': [
                     {
                         'id': subreddit.id,
                         'created': subreddit.created,
+                        'title': subreddit.title,
+                        'description': subreddit.description,
                     } for subreddit in Subreddit.objects.all()
                 ]
             }

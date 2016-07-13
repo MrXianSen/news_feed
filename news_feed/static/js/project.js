@@ -75,6 +75,11 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 {'title': title, 'description': description},
                 function(result) {
                     // TODO | Highlight box red and alert user on error
+                    // DONE
+                    if(result.status == 'OK')
+                        alert("Add success");
+                    else
+                        alert("Something wrong when add \nTitle:" + title + "\nDesc:" + description)
                     console.log(result);
                     getSubreddits(); // Refresh existing subreddits list
                 });

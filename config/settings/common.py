@@ -12,7 +12,10 @@ from __future__ import absolute_import, unicode_literals
 
 import environ
 
+
 ROOT_DIR = environ.Path(__file__) - 3  # (news_feed/config/settings/common.py - 3 = news_feed/)
+print ROOT_DIR
+
 APPS_DIR = ROOT_DIR.path('news_feed')
 
 env = environ.Env()
