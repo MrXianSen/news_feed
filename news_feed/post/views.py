@@ -33,7 +33,11 @@ class CreatePostView(View):
         if subreddit_scope != 'global':
             subreddit = get_object_or_404(Subreddit, id=subreddit_scope)
         # STUDENT TODO | Create post from parameters
-        
+        subreddit = Subreddit.objects.get(id=subreddit_scope);
+        title = input_data['title']
+        content = input_data['content']
+        post = Post(title=title, content=content, subreddit=subreddit)
+        post.save()
         return JsonResponse(status=200, data={'status': 'OK'}, safe=False)
 
 
