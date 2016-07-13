@@ -53,6 +53,10 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 {'subreddit': currentSubreddit, 'title': title, 'content': content},
                 function(result) {
                 // TODO | Highlight box red and alert user on error
+                if(result.status == 'OK')
+                    alert('Add post success')
+                else
+                    alert('Something error when add Post')
                 console.log(result);
                 getPosts(); // Refresh visible posts
             }).$promise;
