@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 logger = logging.getLogger(__name__)
 
 from django.http import JsonResponse
@@ -32,7 +33,11 @@ class CreateSubredditView(View):
         # DONE
         title = input_data['title']
         description = input_data['description']
-        subreddit = Subreddit(title=title, description=description)
+        pop = random.randint(1, 1000)
+        print '------------------------------------------'
+        print pop
+        print '------------------------------------------'
+        subreddit = Subreddit(title=title, description=description, pop=pop)
         subreddit.save()
         return JsonResponse(status=200, data={'status': 'OK'}, safe=False)
 
@@ -61,7 +66,7 @@ class ListSubredditView(View):
                         'description': subreddit.description,
                         # popularity
                         'popularity': subreddit.popularity,
-                    } for subreddit in Subreddit.objects.all().order_by('-popularity')# DONE order by popularity
+                    } for subreddit in Subreddit.objects.all().order_by('-pop')# DONE order by popularity
                 ]
             }
         )
