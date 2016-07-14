@@ -60,7 +60,8 @@ class ListPostView(View):
             posts = Post.objects.filter(subreddit__id=subreddit_scope)
         for post in posts:
             if post.title.lower() == 'bad':
-                post.delete()
+                title = post.title
+                posts = posts.exclude(title=title)
         return JsonResponse(
             status=200,
             data={
