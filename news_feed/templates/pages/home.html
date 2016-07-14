@@ -4,9 +4,11 @@
 <div class="row" ng-controller="HomepageController">
     <div class="posts">
         <ul>
-            <div class="post" ng-repeat="post in posts">
-                <heading ng-bind="post.title"></heading>
-                <content ng-bind="post.content"></content>
+            <div class="post" ng-repeat="post in posts" style="padding:5px;">
+                <heading ng-bind="post.title"  style="width:30%"></heading>
+                <content ng-bind="post.content" style="width:50%"></content>
+                <content style="width:10%;height:inherit;" ng-bind="post.num_likes"></content>
+                <button style="width:10%;height:inherit;" type="submit" ng-click="like(post.id)" class='btn'>LIKE</button>
             </div>
             <div class="navbar-form">
                 <input type="text" ng-model="input_post.title">
@@ -16,8 +18,8 @@
         </ul>
     </div>
     <aside class="subreddits">
-        <button ng-click="sortByTitle()" type="submit" class="btn">Sort by title</button>
-        <button ng-click="sortByDesc()" type="submit" class="btn">Sort by desc</button>
+        <button ng-click="sortByTitle()" type="submit">Sort by title</button>
+        <button ng-click="sortByDesc()" type="submit">Sort by desc</button>
         <uib-tabset vertical="true" type="pills">
             <uib-tab heading="global" select="refreshPosts('global')"></uib-tab>
             <uib-tab heading="{[{subreddit.title}]}" select="refreshPosts(subreddit.id, subreddit.popularity)" ng-repeat="subreddit in subreddits">{[{ subreddit.description }]} has {[{ subreddit.popularity }]} post(s)  popularity: {[{subreddit.pop}]}</uib-tab>

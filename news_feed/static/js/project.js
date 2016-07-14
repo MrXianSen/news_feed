@@ -16,6 +16,10 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
             method:'POST',
             params: {'verb': 'create'},
         },
+        'like':{
+            method:'POST',
+            params: {'verb': 'like'}
+        }
     });
 }])
 .service('SubredditResource', ['$resource', function($resource) {
@@ -90,6 +94,19 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 console.log(result);
                 getPosts(); // Refresh visible posts
             }).$promise;
+        };
+    });
+
+    getPosts().then(function(){
+        $scope.like = function(id){
+            return PostResource.Post.like(
+                {'subreddit': currentSubreddit, 'id': id},
+                function(result){
+                    if(result.status != 'OK')
+                        alert(result.status);
+                    getPosts();
+                }
+            ).$promise;
         };
     });
 
