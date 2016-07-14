@@ -45,9 +45,37 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
     $scope.refreshPosts = function(id, pop) {
         currentSubreddit = id;
         currentPopularity = pop;
-        console.log('Current popularity' + currentPopularity);
         self.getPosts();
     };
+
+    // add to sort by title
+    $scope.sortByTitle = function(){
+        return SubredditResource.Subreddit.get(function(){
+            var len = $scope.subreddits.length;
+            for(var i=0;i<len;i++){
+                for(var j=i;j<len;j++)
+                if($scope.subreddits[i].title > $scope.subreddits[j].title){
+                    var temp = $scope.subreddits[i];
+                    $scope.subreddits[i] = $scope.subreddits[j];
+                    $scope.subreddits[j] = temp;
+                }
+            }
+        }).$promise;
+    }
+
+    $scope.sortByDesc = function(){
+        return SubredditResource.Subreddit.get(function(){
+            var len = $scope.subreddits.length;
+            for(var i=0;i<len;i++){
+                for(var j=i;j<len;j++)
+                if($scope.subreddits[i].description > $scope.subreddits[j].description){
+                    var temp = $scope.subreddits[i];
+                    $scope.subreddits[i] = $scope.subreddits[j];
+                    $scope.subreddits[j] = temp;
+                }
+            }
+        }).$promise;
+    }
 
     // Initialize
     self.posts = [];
@@ -70,6 +98,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
     var getSubreddits = function(){
         return SubredditResource.Subreddit.get(function(result) {
             $scope.subreddits = result.subreddits;
+            console.log($scope.subreddits);
         }).$promise;
     };
 

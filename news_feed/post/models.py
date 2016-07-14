@@ -12,6 +12,7 @@ class Post(models.Model):
     title = models.TextField(null=False, blank=False)
     content = models.TextField(null=False, blank=False)
     subreddit = models.ForeignKey('subreddit.Subreddit', related_name='posts', null=True, blank=True)
+    num_likes = models.IntegerField(default=0)
 
     def __unicode__(self):
         return '{}'.format(self.title)

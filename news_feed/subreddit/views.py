@@ -66,6 +66,7 @@ class ListSubredditView(View):
                         'description': subreddit.description,
                         # popularity
                         'popularity': subreddit.popularity,
+                        'pop': subreddit.pop,
                     } for subreddit in Subreddit.objects.all().order_by('-pop')# DONE order by popularity
                 ]
             }
