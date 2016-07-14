@@ -35,13 +35,17 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
             function($scope, $timeout, filterFilter, PostResource, SubredditResource) {
 
     var currentSubreddit = 'global';
+    // DONE add var named popularity
+    var currentPopularity = 0;
     self.getPosts = function() {
         return PostResource.Post.get({'subreddit': currentSubreddit}, function(result) {
             $scope.posts = result.posts;
         }).$promise;
     };
-    $scope.refreshPosts = function(id) {
+    $scope.refreshPosts = function(id, pop) {
         currentSubreddit = id;
+        currentPopularity = pop;
+        console.log('Current popularity' + currentPopularity);
         self.getPosts();
     };
 
@@ -50,12 +54,10 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
     getPosts().then(function() {
         $scope.createPost = function(title, content) {
             return PostResource.Post.create(
-                {'subreddit': currentSubreddit, 'title': title, 'content': content},
+                {'subreddit': currentSubreddit, 'title': title, 'content': content, 'popularity': currentPopularity},
                 function(result) {
                 // TODO | Highlight box red and alert user on error
-                if(result.status == 'OK')
-                    alert('Add post success')
-                else
+                if(result.status != 'OK')
                     alert('Something error when add Post')
                 console.log(result);
                 getPosts(); // Refresh visible posts
@@ -80,9 +82,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 function(result) {
                     // TODO | Highlight box red and alert user on error
                     // DONE
-                    if(result.status == 'OK')
-                        alert("Add success");
-                    else
+                    if(result.status != 'OK')
                         alert("Something wrong when add \nTitle:" + title + "\nDesc:" + description)
                     console.log(result);
                     getSubreddits(); // Refresh existing subreddits list

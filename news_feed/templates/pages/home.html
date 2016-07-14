@@ -18,7 +18,7 @@
     <aside class="subreddits">
         <uib-tabset vertical="true" type="pills">
             <uib-tab heading="global" select="refreshPosts('global')"></uib-tab>
-            <uib-tab heading="{[{subreddit.title}]}" select="refreshPosts(subreddit.id)" ng-repeat="subreddit in subreddits">{[{ subreddit.description  }]}</uib-tab>
+            <uib-tab heading="{[{subreddit.title}]}" select="refreshPosts(subreddit.id, subreddit.popularity)" ng-repeat="subreddit in subreddits">{[{ subreddit.description }]} {[{ subreddit.popularity }]}</uib-tab>
         </uib-tabset>
         <div class="navbar-form">
             <input type="text" ng-model="input_sub.title">

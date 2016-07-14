@@ -28,16 +28,17 @@ class CreatePostView(View):
         if 'title' not in input_data or 'content' not in input_data:
             logger.error('Missing parameter')
             return JsonResponse(status=400, data={'status': 'Missing parameter'}, safe=False)
-        print '---------------------------------------------'
-        print subreddit_scope
-        print '---------------------------------------------'
         subreddit = None
         if subreddit_scope != 'global':
             subreddit = get_object_or_404(Subreddit, id=subreddit_scope)
         # STUDENT TODO | Create post from parameters
         title = input_data['title']
         content = input_data['content']
+        popularity = input_data['popularity']
+        subreddit.popularity = popularity + 1;
+        print subreddit.popularity
         post = Post(title=title, content=content, subreddit=subreddit)
+        subreddit.save();
         post.save()
         return JsonResponse(status=200, data={'status': 'OK'}, safe=False)
 

@@ -6,7 +6,7 @@ from django.db import models
 class Post(models.Model):
 
     class Meta:
-        ordering = ('-created', )
+        ordering = ('created', )
 
     created = models.DateTimeField(auto_now_add=True)
     title = models.TextField(null=False, blank=False)

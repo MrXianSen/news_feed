@@ -59,7 +59,9 @@ class ListSubredditView(View):
                         'created': subreddit.created,
                         'title': subreddit.title,
                         'description': subreddit.description,
-                    } for subreddit in Subreddit.objects.all()
+                        # popularity
+                        'popularity': subreddit.popularity,
+                    } for subreddit in Subreddit.objects.all().order_by('-popularity')# DONE order by popularity
                 ]
             }
         )
