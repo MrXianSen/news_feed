@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from news_feed.subreddit.models import Subreddit
 
-from .models import Post
+from .models import Post, Comment
 
 
 class CreatePostView(View):
@@ -93,3 +93,40 @@ class LikePostView(View):
         post.num_likes = post.num_likes + 1
         post.save()
         return JsonResponse(status=200, data={'status': 'OK'}, safe=False)
+
+class CreateCommentView(View):
+    def post(self, request, subreddit_scope, *args, **kwargs):
+        input_data = json.loads(request.body)
+        print input_data
+        if 'content' not in input_data and 'id' not in input_data:
+            return JsonResponse(status=400, data={'status': 'Missing parameter'}, safe=False)
+        content = input_data['content']
+        print '---------------------------------'
+        print content
+        print '---------------------------------'
+        id = input_data['id']
+        post = Post.objects.get(id=id)
+        comment = Comment(content=content, post=post)
+        comment.save()
+        return JsonResponse(status=200, data={'status':'OK'}, safe=False)
+
+class GetCommentView(View):
+    def post(self, request, subreddit_scope, *args, **kwargs):
+        input_data = json.loads(request.body)
+        if 'id' not in input_data:
+            return JsonResponse(status=400, data={'status': 'Missing parameter'}, safe=False)
+        id = input_data['id']
+        comments = Comment.objects.filter(post__id=id)
+        print comments
+        return JsonResponse(
+            status=200,
+            data={
+                'status': 'OK',
+                # STUDENT TODO | Return title and content as well
+                'comments': [
+                    {
+                        'content': comment.content,
+                    } for comment in comments
+                ]
+            }
+        )

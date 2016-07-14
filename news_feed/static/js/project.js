@@ -19,6 +19,14 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
         'like':{
             method:'POST',
             params: {'verb': 'like'}
+        },
+        'comment': {
+            method: 'POST',
+            params: {'verb': 'comment'},
+        },
+        'getComments':{
+            method: 'POST',
+            params: {'verb': 'getComments'}
         }
     });
 }])
@@ -46,6 +54,17 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
             $scope.posts = result.posts;
         }).$promise;
     };
+
+    self.comments = [];
+    self.getComments = function(){
+        return PostResource.Post.getComments(
+            {'subreddit':currentSubreddit, 'id':currentPost},
+            function(result){
+                $scope.comments = result.comments;
+            }
+        ).$promise;
+    }
+
     $scope.refreshPosts = function(id, pop) {
         currentSubreddit = id;
         currentPopularity = pop;
@@ -80,6 +99,13 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
             }
         }).$promise;
     }
+    var currentPost = 0;
+    $scope.postOnEach = function(id){
+        currentPost = id;
+        console.log(currentPost);
+        document.getElementById("comment_div").style.display = 'block';
+        self.getComments();
+    }
 
     // Initialize
     self.posts = [];
@@ -91,6 +117,8 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 // TODO | Highlight box red and alert user on error
                 if(result.status != 'OK')
                     alert('Something error when add Post')
+                $scope.input_post.title = "";
+                $scope.input_post.content = "";
                 console.log(result);
                 getPosts(); // Refresh visible posts
             }).$promise;
@@ -108,6 +136,22 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 }
             ).$promise;
         };
+    });
+
+    // create comment
+    getComments().then(function(){
+        $scope.comment = function(content){
+            console.log(content)
+            return PostResource.Post.comment(
+                {'subreddit': currentSubreddit, 'content': content, 'id': currentPost},
+                function(result){
+                    if(result.status != 'OK')
+                        alert(result.status);
+                    $scope.input_comment.content = "";
+                    getComments();
+                }
+            ).$promise;
+        }
     });
 
 
@@ -130,6 +174,8 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                     // DONE
                     if(result.status != 'OK')
                         alert("Something wrong when add \nTitle:" + title + "\nDesc:" + description)
+                    $scope.input_sub.title = "";
+                    $scope.input_sub.description = "";
                     console.log(result);
                     getSubreddits(); // Refresh existing subreddits list
                 });

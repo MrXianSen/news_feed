@@ -4,7 +4,7 @@
 <div class="row" ng-controller="HomepageController">
     <div class="posts">
         <ul>
-            <div class="post" ng-repeat="post in posts" style="padding:5px;">
+            <div class="post" ng-repeat="post in posts" style="padding:5px;" ng-click="postOnEach(post.id)">
                 <heading ng-bind="post.title"  style="width:30%"></heading>
                 <content ng-bind="post.content" style="width:50%"></content>
                 <content style="width:10%;height:inherit;" ng-bind="post.num_likes"></content>
@@ -14,6 +14,17 @@
                 <input type="text" ng-model="input_post.title">
                 <input type="text" ng-model="input_post.content">
                 <button ng-click="createPost(input_post.title, input_post.content)" type="submit" class="btn">Create Post</button>
+            </div>
+            <!-- maybe add pagination here -->
+        </ul>
+        <ul id="comment_div" style="display:none;">
+            <heading><b>Comments:</b></headint>
+            <div class="comment" ng-repeat="comment in comments">
+                <content ng-bind="comment.content"></content>
+            </div>
+            <div>
+                <input type="text" name="comment" ng-model="input_comment.content" style="width:66%" placeholder="say what you want to say here">
+                <button ng-click="comment(input_comment.content)" type="submit" class="btn">comment</button>
             </div>
         </ul>
     </div>

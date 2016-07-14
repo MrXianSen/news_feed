@@ -16,3 +16,10 @@ class Post(models.Model):
 
     def __unicode__(self):
         return '{}'.format(self.title)
+
+class Comment(models.Model):
+	class Meta:
+		ordering = ('post',)
+
+	content = models.TextField(null=False, blank=False)
+	post = models.ForeignKey('Post', related_name="comments", null=False, blank=False)
