@@ -16,6 +16,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
             method:'POST',
             params: {'verb': 'create'},
         },
+        // DONE
         'like':{
             method:'POST',
             params: {'verb': 'like'}
@@ -55,6 +56,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
         }).$promise;
     };
 
+    // DONE
     self.comments = [];
     self.getComments = function(){
         return PostResource.Post.getComments(
@@ -65,15 +67,23 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
         ).$promise;
     }
 
+    // clear comment list view
+    self.clearComment = function(){
+        currentPost = 0;
+        $scope.comments = [];
+        document.getElementById("comment_div").style.display = 'none';
+    }
+
     $scope.refreshPosts = function(id, pop) {
         currentSubreddit = id;
         currentPopularity = pop;
+        self.clearComment();
         self.getPosts();
     };
 
-    // add to sort by title
+    // DONE
     $scope.sortByTitle = function(){
-        return SubredditResource.Subreddit.get(function(){
+        //return SubredditResource.Subreddit.get(function(){
             var len = $scope.subreddits.length;
             for(var i=0;i<len;i++){
                 for(var j=i;j<len;j++)
@@ -83,11 +93,12 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                     $scope.subreddits[j] = temp;
                 }
             }
-        }).$promise;
+        //}).$promise;
     }
 
+    // DONE
     $scope.sortByDesc = function(){
-        return SubredditResource.Subreddit.get(function(){
+        //return SubredditResource.Subreddit.get(function(){
             var len = $scope.subreddits.length;
             for(var i=0;i<len;i++){
                 for(var j=i;j<len;j++)
@@ -97,8 +108,9 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                     $scope.subreddits[j] = temp;
                 }
             }
-        }).$promise;
+        //}).$promise;
     }
+    // DONE
     var currentPost = 0;
     $scope.postOnEach = function(id){
         currentPost = id;
@@ -125,6 +137,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
                 {'subreddit': currentSubreddit, 'title': title, 'content': content, 'popularity': currentPopularity},
                 function(result) {
                 // TODO | Highlight box red and alert user on error
+                // DONE
                 if(result.status != 'OK')
                     alert('Something error when add Post')
                 $scope.input_post.title = "";
@@ -135,6 +148,8 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
         };
     });
 
+
+    // DONE
     getPosts().then(function(){
         $scope.like = function(id){
             return PostResource.Post.like(
@@ -148,7 +163,7 @@ var app = angular.module('NewsFeed', ['ngResource', 'ui.bootstrap'])
         };
     });
 
-    // create comment
+    // DONE
     getComments().then(function(){
         $scope.comment = function(content){
             if(currentPost == 0)

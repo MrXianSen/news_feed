@@ -32,6 +32,7 @@ class CreatePostView(View):
         if subreddit_scope != 'global':
             subreddit = get_object_or_404(Subreddit, id=subreddit_scope)
         # STUDENT TODO | Create post from parameters
+        # DONE
         title = input_data['title']
         content = input_data['content']
         popularity = input_data['popularity']
@@ -58,10 +59,7 @@ class ListPostView(View):
             posts = Post.objects.all().order_by('-num_likes')#.exclude(title__iexact='bad').exclude(num_likes__gt=10)
         else:
             posts = Post.objects.filter(subreddit__id=subreddit_scope).exclude(title__iexact='bad').exclude(num_likes__gt=10).order_by('-num_likes')
-        #for post in posts:
-        #    if post.title.lower() == 'bad':
-        #        title = post.title
-        #        posts = posts.exclude(title=title)
+        # DONE
         return JsonResponse(
             status=200,
             data={
@@ -79,6 +77,7 @@ class ListPostView(View):
             }
         )
 
+# DONE
 class LikePostView(View):
     def post(self, request, subreddit_scope, *args, **kwargs):
         print '-------------------------------'
